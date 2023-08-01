@@ -1,0 +1,108 @@
+{% extends 'main.html' %}
+
+
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add to Cart - Dark Theme</title>
+  <style>
+    /* CSS styles */
+    body{
+
+
+        background-colour:black
+    }
+    .cart-item {
+      background-color: #777; /* Set the background color to grey */
+      color: #fff;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .product-details {
+      display: flex;
+      align-items: center;
+    }
+
+    .product-image {
+      width: 100px;
+      height: 100px;
+      /* Insert additional styling for the product image */
+    }
+
+    .product-info {
+      margin-left: 20px;
+    }
+
+    .product-title {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    .product-description {
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .product-price {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .add-to-cart-button {
+      background-color: #333;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      /* Insert additional styling for the add to cart button */
+    }
+  </style>
+</head>
+<body >
+  <div class="cart-item">
+    {% for p in products %}
+    <div class="product-details">
+      <div class="product-image">
+        <!-- Insert product image here -->
+      </div>
+
+
+
+      
+<form action="{% url 'add_item' p.id %}" method="POST">
+  {% csrf_token %}
+  <!-- Other form fields -->
+  <button calss='add-to-cart-button' type="submit">Add to Cart</button>
+  
+</form>
+
+
+<form method = 'POST' action = "{% url 'buy_item' p.id %}">
+{% csrf_token %}
+  <button calss='add-to-cart-button' type="submit">BUY NOW</button>
+</FORM>
+
+
+</div>
+
+{% endfor %}  
+
+  <script>
+    // JavaScript code
+    const addToCartButton = document.querySelector('.add-to-cart-button');
+    addToCartButton.addEventListener('click', function() {
+      // Insert logic for adding the item to the cart
+      // You can add your custom code here
+      console.log('Item added to cart!');
+    });
+  </script>
+</body>
+</html>
+
+
+
+{% endblock content %}

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+    .product-card .button-container {
+        display: flex; /* Use flexbox to align buttons in the same line */
+       padding-left:550px;
+        text-align: center;
+        justify-content:space-between;
+        padding-right:520px;
+        margin-top: 10px;
+    }
+    body {
+        background-color: #1a1a1a;
+        color: #ffffff;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    
+    header {
+        /* Add header styling */
+    }
+    
+    main {
+        padding: 20px;
+    }
+    
+
+    .product-display .
+    
+
+    
+        
+    
+    .product-display {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    
+    .product-card {
+        background-color: #2b2b2b;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+    }
+    
+    .product-card img {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    .product-card h3 {
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
+    
+    .product-card p {
+        font-size: 14px;
+    }
+    
+    .product-card .price {
+        font-size: 18px;
+        font-weight: bold;
+    }
+    
+    .product-card .btn {
+        background-color: #ff6600;
+        color: #ffffff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    
+    .product-card .btn:hover {
+        background-color: #ff5500;
+    }
+    
+    .product-reviews {
+        margin-top: 30px;
+    }
+    
+    .product-reviews h2 {
+        margin-bottom: 20px;
+    }
+    
+    .product-reviews form label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    
+    .product-reviews form input,
+    .product-reviews form textarea {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #444444;
+        background-color: #2b2b2b;
+        color: #ffffff;
+    }
+    
+    .product-reviews form textarea {
+        resize: vertical;
+    }
+    
+    .product-reviews .btn {
+        background-color: #ff6600;
+        color: #ffffff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    
+    .product-reviews .btn:hover {
+        background-color: #ff5500;
+    }
+    
+    .review {
+        margin-bottom: 20px;
+        border: 1px solid #444444;
+        border-radius: 8px;
+        padding: 15px;
+    }
+    
+    .review .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    
+    .review .username {
+        font-weight: bold;
+    }
+    
+    .review .rating {
+        background-color: #ff6600;
+        color: #ffffff;
+        padding: 5px 10px;
+        border-radius: 4px;
+    }
+    .out-of-sale-btn {
+          background-color: #ccc;
+          color: red;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 4px;
+          cursor: not-allowed;
+        }
+        .in-sale-btn {
+          background-color: #ccc;
+          color: green;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 4px;
+          cursor: not-allowed;
+        }
+
+
+/* Add footer styling */
+
+
+
+</style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Theme E-commerce Site</title>
+   
+</head>
+<body>
+    <header>
+        <!-- Add your logo and navigation menu here -->
+    </header>
+
+    <main>
+        <section class="product-display">
+            <!-- Product cards will be dynamically generated from backend data -->
+            <div class="product-card">
+                <img src="product1.jpg" alt="Product 1">
+                <h3>{{J.name}}</h3>
+                <p>{{J.type}}</p>
+                <span class="price">{{J.price}}</span>
+                {% if count == 0 %}
+                <h3>@ NEW </h3>
+                {% endif %}
+                
+            <div class="button-container">
+                <form action="{% url 'add_item' J.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn">Add to Cart</button>
+                </form> 
+
+                <form action="{% url 'buy_item' J.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn">Buy Now</button>
+                </form>
+                
+            </div>
+                <br>
+                <br>
+
+            {% if J.for_sale == 0 %}
+            <button class="out-of-sale-btn" disabled>Out of Stock</button>
+            <br>
+            <br>
+            {% else %}
+            <button class="in-sale-btn" disabled>In Stock </button>
+            <br>
+            <br>
+            {% endif %}
+            </div>
+            
+            <!-- Repeat the product cards for each product -->
+        </section>
+
+         
+    <!-- Review writing form -->
+    {% if count == 1 %}
+    <h2>Write a Review</h2>
+    <div class = "review">
+        <form action = "{% url 'review' J.id %}" method ="POST">
+            {% csrf_token %}
+            <label for="rating">Rating:</label>
+            <input type="number" id="rating" name="rating" min="1" max="5" required>
+            <label for="review">Your Review:</label>
+            <textarea id="review" name="review" rows="4" required></textarea>
+            
+            <button type="submit" class="btn">Submit Review</button>
+        </form>
+    </div>
+    {% endif %}
+    
+    
+
+
+    <!-- Review display section -->
+    
+    <h2>Product Reviews</h2>
+    {% if obj %}
+        {% for review_obj in obj %}
+        <div class="review">
+            <div class="review-header">
+                <span class="username">{{ review_obj.user.username }}</span>
+                <span class="rating">{{ review_obj.rating }}/5</span>
+            </div>
+            <p class="review-content">
+                {{ review_obj.body }}
+            </p>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p class = "review-content">No reviews available for this product.</p>
+    {% endif %}
+
+
+            <!-- Repeat the review display for each review -->
+        </section>
+    </main>
+
+    <footer>
+        <!-- Add your footer content here -->
+    </footer>
+</body>
+</html>

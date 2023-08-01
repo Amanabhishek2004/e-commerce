@@ -1,0 +1,118 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shopping Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: black;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .cart-item {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding: 10px;
+        }
+        .cart-item img {
+            max-width: 100px;
+            margin-right: 20px;
+        }
+        .cart-item-details {
+            flex: 1;
+        }
+        .cart-item-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .cart-item-price {
+            color: #777;
+        }
+        .cart-total {
+            margin-top: 20px;
+            text-align: right;
+        }
+        .cart-total span {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .continue-shopping {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .continue-shopping a {
+            color: #007bff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Shopping Cart</h1>
+    </header>
+    <div class="container">
+        
+        {% for j in cart_item %}
+            
+              <div class="cart-item">
+                  <img src=""  />
+                  <div class="cart-item-details">
+                      <div class="cart-item-name">{{ j.item }}</div>
+                      <div class="cart-item-price">${{ j.item.type }}</div>
+                    </div>
+              </div>
+                
+                <div class="cart-total">
+                    <span>Total: ${{j.item.price}}</span>
+                    <br>
+                    <nav>Quantity: {{j.quantity}}</nav>
+                    {% comment %} <nav><a href="{% url 'add_item' j.item.id %}"> + </a></nav> {% endcomment %}
+                    <form method = 'POST' action ="{% url 'add_item' j.item.id %}">
+                    {% csrf_token %}
+                    <button type="submit">+</button>
+                </form>
+                <button type = "submit"><a href = "{% url 'delete_item' j.item.id %}">----</a></button>
+
+                    
+
+                </div>
+
+                <div class="continue-shopping">
+                    <a href="{% url 'buy-item' j.item.id %}">Buy Now</a>
+                </div>
+                {% endfor %}
+        
+    </div>
+</body>
+</html>
+
+
+{% endblock content %}
+
+
+
+
+

@@ -1,0 +1,139 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Product Display</title>
+  <style>
+    body {
+      background-color: #1f1f1f;
+      color: #ffffff;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .product-display {
+      display: flex;
+    }
+
+    .product-image {
+      width: 40%;
+    }
+
+    .product-image img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .product-details {
+      width: 60%;
+      padding-left: 20px;
+    }
+
+    .product-title {
+      font-size: 24px;
+      margin: 0;
+    }
+
+    .product-description {
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    .product-price {
+      font-size: 20px;
+      margin-top: 10px;
+    }
+
+    .product-actions {
+      margin-top: 20px;
+    }
+
+    .product-actions button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-right: 10px;
+      background-color: blue;
+      color: #ffffff;
+      border: none;
+      cursor: pointer;
+    }
+    .out-of-sale-btn {
+      background-color: #ccc;
+      color: red;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: not-allowed;
+    }
+    .in-sale-btn {
+      background-color: #green;
+      color: green;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: not-allowed;
+    }
+
+    .product-actions button:hover {
+      background-color: #555555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="product-display">
+      <div class="product-image">
+        <img src="product_image.jpg" alt="Product Image">
+      </div>
+      <div class="product-details">
+        <h2 class="product-title">{{i.name}}</h2>
+        <p class="product-description">{{i.type}}</p>
+        <p class="product-price">Rs {{i.price}}</p>
+
+        {% if i.for_sale == 0 %}
+        <button class="out-of-sale-btn" disabled>Out of Stock</button>
+        <br>
+        <br>
+        {% else %}
+        <button class="in-sale-btn" disabled>In Stock </button>
+        <br>
+        <br>
+        {% endif %}
+        <div class="product-actions">
+          <form action="{% url 'add_item' i.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="add-to-cart">Add to Cart</button>
+            <button class="buy-now"><a href="{% url 'buy_item' i.id %}">Buy Now</a></button>
+          </form>
+          <hr>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% include "review.html" %}
+</body>
+</html>
+
+
+           
+</html>
+
+
+
+
+
+
+
+
+
+
+{% endblock content %}

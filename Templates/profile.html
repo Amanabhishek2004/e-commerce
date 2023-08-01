@@ -1,0 +1,114 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Profile</title>
+  <!-- Add your CSS stylesheets and JavaScript files here -->
+  <style>
+    body {
+      background-color: #000;
+      color: white ;
+      font-family: Arial, sans-serif;
+    }
+    
+    h1, h2 {
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    .profile-section {
+      background-color: #111;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+    
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    
+    li {
+      margin-bottom: 20px;
+    }
+    
+    button {
+      background-color: blue;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 3px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <h1>User Profile</h1>
+
+  <div class="profile-section">
+    <h2>Personal Information</h2>
+    <p><strong>Name:</strong> John Doe</p>
+    <p><strong>Email:</strong> johndoe@example.com</p>
+    <p><strong>Username:</strong> johndoe123</p>
+    <p><strong>Full Name:</strong> John Doe</p>
+    <p><strong>Date of Birth:</strong> January 1, 1990</p>
+    <p><strong>Gender:</strong> Male</p>
+    <p><strong>Address:</strong> 123 Main Street, Anytown, USA</p>
+  </div>
+
+  <div class="profile-section">
+    <h2>Order History</h2>
+    <ul>
+      <li>
+        <p><strong>Order #12345</strong></p>
+        <p><strong>Date:</strong> July 5, 2023</p>
+        <p><strong>Total Amount:</strong> $49.99</p>
+        <p><strong>Status:</strong> Delivered</p>
+      </li>
+      <li>
+        <p><strong>Order #12346</strong></p>
+        <p><strong>Date:</strong> June 25, 2023</p>
+        <p><strong>Total Amount:</strong> $79.99</p>
+        <p><strong>Status:</strong> Shipped</p>
+      </li>
+      <li>
+        <p><strong>Order #12347</strong></p>
+        <p><strong>Date:</strong> June 10, 2023</p>
+        <p><strong>Total Amount:</strong> $29.99</p>
+        <p><strong>Status:</strong> Delivered</p>
+      </li>
+    </ul>
+  </div>
+
+  <div class="profile-section">
+    <h2>Wishlist</h2>
+    <ul>
+      <li>
+        <p><strong>Product A</strong></p>
+        <p><strong>Price:</strong> $19.99</p>
+        <button>Add to Cart</button>
+      </li>
+      <li>
+        <p><strong>Product B</strong></p>
+        <p><strong>Price:</strong> $39.99</p>
+        <button>Add to Cart</button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Add additional sections or customize the page as needed -->
+
+</body>
+</html>
+
+
+
+
+
+{% endblock content %}

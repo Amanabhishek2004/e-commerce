@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    /* Apply a dark background to the body */
+    body {
+        background-color: #222;
+        color: #fff;
+        font-family: Arial, sans-serif;
+    }
+    
+    /* Style the header, navigation bar, and links */
+    .header {
+        background-color: #333;
+        padding: 10px;
+        text-align: center;
+    }
+    
+    .header a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 15px;
+    }
+    
+    /* Style the main content section */
+    .main {
+        padding: 20px;
+    }
+    
+    .user-profile {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    
+    .profile-avatar img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-right: 20px;
+    }
+    
+    .profile-name {
+        font-size: 24px;
+        margin-bottom: 5px;
+    }
+    
+    .profile-email, .profile-location {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+    
+    /* Additional styling for user activity, orders, preferences, etc. can be added here */
+    
+    /* Style the footer */
+    .footer {
+        background-color: #333;
+        padding: 10px;
+        text-align: center;
+    }
+    
+    .footer a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 15px;
+    }
+    
+    
+    
+
+</style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Dark Theme</title>
+    <link rel="stylesheet" href="path/to/dark-theme.css">
+</head>
+
+<body>
+    <header class="header">
+        <!-- Your dark-themed navigation bar goes here -->
+    </header>
+
+    <main class="main">
+        <div class="user-profile">
+            <div class="profile-avatar">
+                <img src="path/to/user-avatar.jpg" alt="User Avatar">
+            </div>
+            {% for i in user %}
+            <div class="profile-details">
+                <h1 class="profile-name"></h1>
+                <p class="profile-email">{{i.username}}</p>
+                <p class="profile-location">{{i.address}}</p>
+                
+                <!-- Add more user information here as needed -->
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Other sections for user activity, orders, preferences, etc. can be added here -->
+
+    </main>
+
+    <footer class="footer">
+        <!-- Your dark-themed footer goes here -->
+    </footer>
+</body>
+
+</html>
