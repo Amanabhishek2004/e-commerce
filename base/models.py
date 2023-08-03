@@ -15,7 +15,7 @@ class address(models.Model):
     host = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
     name = models.CharField(null=True, max_length=200)
     
-    # list=list(self.name)
+    
     
     def __str__(self):
         for i in range(100):
@@ -50,24 +50,17 @@ class cart(models.Model):
     
     def __str__(self) -> str:
         return f'{self.item} Added by  {self.ordered_by}'
-    # class Meta:
-    #     ordering = [-'created']
+ 
 
 
 
 
-# customer
 
-class customer (models.Model):
-    name = models.ForeignKey(User, on_delete=models.CASCADE,null = True) 
-    email = models.EmailField(max_length =80)
-    venue = models.ForeignKey( address,null= True, on_delete=models.CASCADE)      
 
-    def __str__(self) -> str:
-        return 
+
 # orders
 class orders(models.Model):
-    tracking_id = models.BigIntegerField(null =True)
+    
     ordered_by = models.ForeignKey(User, on_delete=models.CASCADE,null =True)
     name = models.ForeignKey(product, null=True, on_delete=models.CASCADE)
     deliver_to = models.ForeignKey(address,null =True,on_delete=models.CASCADE)
@@ -93,10 +86,10 @@ class status(models.Model):
 
 class order_tracking(models.Model):
     
-    tracking_id = models.BigIntegerField(null =True)
+    tracking_id = models.CharField(max_length=10,null =True)
     user = models.ForeignKey(User,on_delete=models.CASCADE,null =True)
     Product = models.ForeignKey(product,null=True , on_delete= models.CASCADE)
-    dlivery_status = models.ManyToManyField(status,null=True,max_length=200)
+    dlivery_status = models.ManyToManyField(status,null=True)
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now_add=True)
     

@@ -144,6 +144,7 @@
 
 
 
+
 button{
     padding-right: 10px;
     justify-content:space-between ;
@@ -168,8 +169,8 @@ button{
             <li><a href="#">Categories</a></li>
             <li><a href="#">Deals</a></li>
             <li><a href="{% url 'cart' %}">Cart</a></li>
-            <li><a href="#">Account</a></li>
             {% if request.user.is_authenticated %}
+            <li><a href="{% url 'accounts:user-profile' %}">Account</a></li>
             <li><a href="{% url 'logout-user' %}">Logout</a></li>
             {% else %}
             <li><a href="{% url 'login-user' %}">Login</a></li>

@@ -5,6 +5,7 @@ from .models import *
 from django.contrib.auth import authenticate, login, logout
 from .forms import order_through_cart_form
 from django.contrib.auth.decorators import login_required
+from user_accounts.models import *
 import uuid
 import datetime
 
@@ -166,16 +167,19 @@ def buy_now(request, pk):
                 tracking_id = str(uuid.uuid4())[:8]
                 total_amount = Product.price*quantity
 
-                orders.objects.create(
+                b=orders.objects.create(
 
                     name=Product,
                     ordered_by=user,
                     deliver_to=Address,
                     no_of_items=quantity,
-                    total_amount=total_amount,
-                    tracking_id=tracking_id
+                    total_amount=total_amount
                 )
                 orders.save()
+                a=customer.objects.create(name = user,email = user.email,venue = Address)
+                a.save()
+                a.Orders_till_now.add(b)
+                a.save()
 
             else:
                 return HttpResponse('Sorry, the requested quantity exceeds the available stock.')
@@ -192,7 +196,9 @@ def buy_item_through_cart(request, pk):
     user = request.user
     Product = product.objects.get(id=pk)
     cart_item = cart.objects.filter(ordered_by=user, item=Product).first()
+    Address = address.objects.get(host = user)
     # Initialize the form with the cart_item quantity
+    
     tracking_id = str(uuid.uuid4())[:8]
 
     initial_data = {'amount': cart_item.quantity} if cart_item else {}
@@ -204,7 +210,7 @@ def buy_item_through_cart(request, pk):
 
     if request.method == 'POST':
         form = order_through_cart_form(request.POST)
-        existing_tag = status.objects.get(name="DISPATCHED")
+        existing_tag = status.objects.get(id = 1)
         if form.is_valid():
 
             # Create the order and update the product quantity
@@ -212,11 +218,19 @@ def buy_item_through_cart(request, pk):
                 ordered_by=user, name=Product, no_of_items=form.cleaned_data['amount'])
             Product.for_sale -= order.no_of_items
             Product.save()
-            cart_item.delete()
-
-            order_tracking.objects.create(
+            if cart_item:
+             cart_item.delete()
+            
+            a=order_tracking.objects.create(
                 tracking_id=tracking_id, user=user, Product=Product)
-            order_tracking.dlivery_status.add(existing_tag)
+            a.save()
+            a.dlivery_status.add(existing_tag)
+            a.save()
+            c=customer.objects.create(name = user,venue = Address)
+            c.save()
+            c.Orders_till_now.add(order)
+            c.save()
+
             return redirect('cart')
 
     return render(request, 'buy_now_through_car.html', context)
@@ -227,30 +241,35 @@ def review_post(request, pk):
         Product = product.objects.get(id=pk)
     except product.DoesNotExist:
         return HttpResponse("Product not found.")
-
-    obj = review.objects.filter(Product__name=Product)
+    
     user = request.user
-    Review = review.objects.filter(user=user)
+    Customer = customer.objects.filter(name = user).first()
+    Review = review.objects.filter(user=user,Product =Product)
 
     count = 0
     if not Review.exists():  # Check if the user has already submitted a review
         count = 1
-    if request.method == "POST":
+    if request.method == "POST" and Customer is not None:
         rating = int(request.POST.get('rating', 0))
         if 0 < rating <= 5:  # Check if the rating is within the valid range
             Review = review.objects.create(user=user, body=request.POST.get(
                 'review'), rating=rating, Product=Product)
             Review.save()
+            Customer.activities.add(Review)
+            Customer.save()
+            
             # Redirect to the "info" page with the appropriate product's pk
             return redirect('info', pk=Product.pk)
         else:
             return HttpResponse("Please rate on the scale of 1 to 5.")
 
     context = {
-        "obj": obj,
+        "obj": Review,
         "count": count
     }
+    
     return render(request, "PRODUCT-INFO.html", context)
+    
 
 
 #  shippment tracking

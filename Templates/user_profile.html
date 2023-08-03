@@ -1,4 +1,128 @@
 <!DOCTYPE html>
+<html>
+<head>
+  <title>User Accounts Page</title>
+  <style>
+    /* CSS styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #222;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #f1c40f;
+    }
+
+    .user-details {
+      margin-top: 20px;
+    }
+
+    .user-details label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .user-details p {
+      margin-bottom: 10px;
+    }
+
+    .user-activities {
+      margin-top: 20px;
+    }
+
+    .user-activities table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .user-activities th,
+    .user-activities td {
+      padding: 10px;
+      border-bottom: 1px solid #444;
+    }
+
+    .user-activities th {
+      background-color: #444;
+      color: #f1c40f;
+    }
+
+    .user-activities tr:hover {
+      background-color: #333;
+    }
+
+    .user-actions {
+      display: flex;
+      margin-top: 20px;
+      gap: 10px;
+    }
+
+    .user-actions button {
+      padding: 10px 20px;
+      background-color: #f1c40f;
+      color: #222;
+      border: none;
+      cursor: pointer;
+    }
+
+    .user-actions button:hover {
+      background-color: #e67e22;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>User Accounts Page</h1>
+
+    <!-- User details -->
+    
+    <div class="user-details">
+      <label>{{customer.name.username}}</label>
+      <label>{{customer.venue}}</label>
+      <label>{{customer.name.email}}</label>
+      
+      <!-- Add other user details here -->
+    </div>
+   
+
+    <!-- User activities -->
+    <div class="user-activities">
+      <h2>User Activities</h2>
+      <table>
+        <tr>
+          <th>Date</th>
+          <th>Activity</th>
+          <!-- Add other activity columns here -->
+        </tr>
+        <tr>
+          <td>[Date]</td>
+          <td>[Activity]</td>
+          <!-- Add data for other activity columns here -->
+        </tr>
+        <!-- Add more rows for user activities -->
+      </table>
+    </div>
+
+    <!-- User actions -->
+    <div class="user-actions">
+      <a href ="{% url 'accounts:update-user'  %}"><button id="update-btn">Update</button></a>
+      <button id="delete-btn">Delete</button>
+      <!-- Add more buttons for other actions if needed -->
+    </div>
+  </div>
+</body>
+</html>
+
+
+
+{% comment %} <!DOCTYPE html>
 <html lang="en">
 <style>
     
@@ -73,7 +197,10 @@
     
     
     
-
+    .profile-details.input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+    
 </style>
 <head>
     <meta charset="UTF-8">
@@ -92,15 +219,16 @@
             <div class="profile-avatar">
                 <img src="path/to/user-avatar.jpg" alt="User Avatar">
             </div>
-            {% for i in user %}
+            {% for i in orders %}
             <div class="profile-details">
                 <h1 class="profile-name"></h1>
-                <p class="profile-email">{{i.username}}</p>
-                <p class="profile-location">{{i.address}}</p>
-                
+                <p class="profile-email">{{i.name}}</p>
+                <p class="profile-location">{{i.name.price}}</p>
+                <input type="submit" value="Update">
                 <!-- Add more user information here as needed -->
             </div>
             {% endfor %}
+            
         </div>
 
         <!-- Other sections for user activity, orders, preferences, etc. can be added here -->
@@ -112,4 +240,4 @@
     </footer>
 </body>
 
-</html>
+</html> {% endcomment %}
