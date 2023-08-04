@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete User - Warning</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+        }
+        .warning-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        .warning-text {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        .username {
+            font-weight: bold;
+            color: #f44336;
+        }
+        .btn-confirm {
+            background-color: #f44336;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn-confirm:hover {
+            background-color: #c62828;
+        }
+        .btn-cancel {
+            background-color: #333333;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn-cancel:hover {
+            background-color: #1a1a1a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="warning-icon">⚠️</div>
+        <div class="warning-text">Are you sure you want to delete the user <span class="username">{{request.user}}</span>?</div>
+        <p>This action is irreversible and will permanently remove the user from the system.</p>
+        <div>
+            <form  method = "POST", action ="">
+                {% csrf_token %}
+            <button class="btn-confirm" >Confirm Delete</button>
+            </form>
+            <a href ="{% url 'accounts:user-profile' %}"><button class="btn-cancel" >Cancel</button></a>
+        </div>
+    </div>
+    <script>
+        function deleteUser() {
+            // Implement the logic to delete the user here
+            // You can use AJAX or any other method to send the deletion request to the server
+            // After successful deletion, redirect the user to a success page or the user list page.
+        }
+
+        function goBack() {
+            // Implement the logic to go back to the previous page
+            // You can use history.back() or window.location.href to navigate back
+        }
+    </script>
+</body>
+</html>

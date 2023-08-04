@@ -95,17 +95,20 @@
     <!-- User activities -->
     <div class="user-activities">
       <h2>User Activities</h2>
+      
       <table>
         <tr>
           <th>Date</th>
           <th>Activity</th>
           <!-- Add other activity columns here -->
         </tr>
+        {% for r in reviews %}
         <tr>
-          <td>[Date]</td>
-          <td>[Activity]</td>
+          <td>{{r.created}}</td>
+          <td>{{r.body}}</td>
           <!-- Add data for other activity columns here -->
         </tr>
+        {% endfor %}
         <!-- Add more rows for user activities -->
       </table>
     </div>
@@ -113,7 +116,7 @@
     <!-- User actions -->
     <div class="user-actions">
       <a href ="{% url 'accounts:update-user'  %}"><button id="update-btn">Update</button></a>
-      <button id="delete-btn">Delete</button>
+      <a href = "{% url 'accounts:delete-user' %}"><button id="delete-btn">Delete</button></a>
       <!-- Add more buttons for other actions if needed -->
     </div>
   </div>

@@ -73,6 +73,7 @@ class review(models.Model):
     body = models.CharField(max_length=300)
     rating = models.DecimalField(max_digits=2,decimal_places=1)
     Product = models.ForeignKey(product,null=True , on_delete= models.CASCADE)
+    created = models.DateTimeField(null=True,auto_now_add = True)
 
     def __str__(self):
         return f"Review of {self.Product} by {self.user}"

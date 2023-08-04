@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Review</title>
+  <style>
+    /* Dark theme styles */
+    body {
+      background-color: #1a1a1a;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+    }
+
+    h2 {
+      color: #ffffff;
+    }
+
+    label {
+      color: #cccccc;
+    }
+
+    input[type="text"],
+    textarea {
+      background-color: #333333;
+      color: #ffffff;
+      border: 1px solid #666666;
+      padding: 5px;
+    }
+
+    button {
+      background-color: #444444;
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    form {
+      margin-top: 20px;
+    }
+
+    .field {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Edit Review</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div class="field">
+      <label for="{{ form.body.id_for_label }}">Review Body:</label>
+      {{ form.body }}
+    </div>
+    <button type="submit">Save Changes</button>
+  </form>
+</body>
+</html>
