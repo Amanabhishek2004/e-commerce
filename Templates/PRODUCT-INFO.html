@@ -137,13 +137,6 @@
     .review .username {
         font-weight: bold;
     }
-/*     
-    .review .rating {
-        background-color: #444444;
-        color: #ffffff;
-        padding: 5px 10px;
-        border-radius: 4px;
-    } */
 
 
     .review.rating{
@@ -277,7 +270,7 @@ textarea :placeholder-shown{
         </section>
 
          
-    <!-- Review writing form -->
+{% if reviewed_by_user %}
     <h2>Write a Review</h2>
     <div class = "review">
     <form action = "{% url 'review' J.id %}" method ="POST">
@@ -285,19 +278,25 @@ textarea :placeholder-shown{
         <label for="rating">Rating:</label>
         <input type="number" id="rating" name="rating" min="1" max="5" required><br>
         <label for="review"></label>
-        <textarea id="review" name="review" rows="4"placeholder="write your review" required></textarea>
+        <textarea id="review" name="review" rows="4" placeholder="write your review" required></textarea>
 
         <button type="submit" class="btns">Submit Review</button>
     </form>
 </div>
-
+{% endif %}
     <!-- Review display section -->
     <h2>Product Reviews</h2>
     {% for i in obj %}
+
     <div class="review">
         <div class="review-header">
             <span class="username">{{i.user.username}}</span>
+
             <span class="rating">{{i.rating}}/5</span>
+<br>
+            <span class="rating">{{i.created}}</span>
+
+
         </div>
         <p class="review-content">
             {{i.body}}
@@ -306,8 +305,6 @@ textarea :placeholder-shown{
     {% endfor %}
 
 
-            <!-- Repeat the review display for each review -->
-        </section>
     </main>
 
     <footer>

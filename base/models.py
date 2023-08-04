@@ -66,7 +66,8 @@ class orders(models.Model):
     deliver_to = models.ForeignKey(address,null =True,on_delete=models.CASCADE)
     no_of_items = models.PositiveIntegerField(null =True,default=0)
     total_amount = models.BigIntegerField(null =True,blank=True)
-
+    def __str__(self):
+        return f"{self.name} ordered by{self.ordered_by}"
 class review(models.Model):
     
     user = models.ForeignKey(User,on_delete=models.CASCADE)

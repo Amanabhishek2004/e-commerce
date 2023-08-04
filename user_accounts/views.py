@@ -62,3 +62,16 @@ def delete_user(request):
         user_to_be_delted.delete()
         
     return render(request, "delete_user.html", {"user": user_to_be_delted, "page": page})
+
+def delete_review(request):
+    user = request.user
+    Review = review.objects.get(user = user)
+    context={
+        "Review":Review
+    }
+    if request.method == "POST":
+
+        Review.delete()
+
+
+    return render(request,"delete_user.html")

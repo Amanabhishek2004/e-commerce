@@ -26,15 +26,18 @@ def user_accounts(request):
 def product_info(request, pk):
     count = 0
     obj = product.objects.get(id=pk)  # Use the correct Product model
-
+    review_obj = review.objects.filter(Product = obj)
     current_datetime = timezone.now()
     print(current_datetime)
-
     print(product.created_at, "***********************************")
+
     two_days_later = current_datetime + datetime.timedelta(days=2)
+
     if obj.created_at > two_days_later:  # Use obj.created_at to access the creation date
-        count = 1
-    context = {'J': obj, "count": count}
+        count = 2
+    reviewed_by_user = review.objects.filter( Product = obj, user = request.user)
+
+    context = {'J': obj, "obj":review_obj,"count":count,"reviewed_by_user":reviewed_by_user}
     return render(request, 'PRODUCT-INFO.html', context)
 # login/ log out user
 
@@ -289,11 +292,8 @@ def review_post(request, pk):
         else:
             return HttpResponse("Please rate on the scale of 1 to 5.")
 
-    context = {
-        "obj": Review
-    }
 
-    return render(request, "PRODUCT-INFO.html", context)
+
 
 def review_edit(request):
     user =request.user
