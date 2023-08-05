@@ -370,6 +370,9 @@ button:focus {
                 <img src="product1.jpg" alt="Product 1">
                 <h3>{{J.name}}</h3>
                 <p>{{J.type}}</p>
+                {% if count == 2 %}
+                    <P>@NEW</P>
+                {% endif %}
                 <span class="price">{{J.price}}</span>
                 
                 

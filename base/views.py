@@ -11,7 +11,18 @@ import datetime
 
 
 def home(request):
-    obj = product.objects.all()
+    q= request.GET.get("q") if request.GET.get("q") != None else ""
+    s=None
+    r=None
+
+    if q:
+     s,r = q.split()
+     if s is None:
+         s=""
+     if r is None:
+         r=""
+     obj = product.objects.filter(name__icontains= s,type__name__contains = r )
+
     context = {'obj': obj}
     return render(request, 'home.html', context)
 
@@ -31,14 +42,16 @@ def product_info(request, pk):
     print(current_datetime)
     print(product.created_at, "***********************************")
 
-    two_days_later = current_datetime + datetime.timedelta(days=2)
+    two_days_ago = current_datetime - datetime.timedelta(days=2)  # Subtract two days from the current date
 
-    if obj.created_at > two_days_later:  # Use obj.created_at to access the creation date
+    if obj.created_at >= two_days_ago:
         count = 2
-    reviewed_by_user = review.objects.filter( Product = obj, user = request.user)
+    reviewed_by_user = review.objects.filter( Product = obj, user = request.user).exists()
 
     context = {'J': obj, "obj":review_obj,"count":count,"reviewed_by_user":reviewed_by_user}
     return render(request, 'PRODUCT-INFO.html', context)
+
+
 # login/ log out user
 
 
