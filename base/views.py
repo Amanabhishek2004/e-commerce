@@ -10,25 +10,62 @@ import uuid
 import datetime
 
 
-def home(request):
-    q= request.GET.get("q") if request.GET.get("q") != None else ""
-    s=None
-    r=None
+def string_cleaner(string):
+  if string:
 
-    if q:
-     s,r = q.split()
-     if s is None:
-         s=""
-     if r is None:
-         r=""
-     obj = product.objects.filter(name__icontains= s,type__name__contains = r )
+    str1 = ""
+    str2 = ""
+    if  "," in string:
+        for i in range(len(string)):
+            if string[i] == ",":
+                str1 = string[:i].strip()
+                str2 = string[i + 1:].strip()
+                break
+        string = str1 + "," + str2
+
+    if  " " in string:
+        for i in range(len(string)):
+            if string[i] == " ":
+                str1 = string[:i].strip()
+                str2 = string[i + 1:].strip()
+                break
+
+        string = str1 + "," + str2
+    return string
+  else:
+      return ""
+
+
+
+def home(request):
+    # logic for search bar
+
+    # Use the corrected string_cleaner function to clean the search query.
+    q = request.GET.get("q")
+    q = string_cleaner(q)
+    print(q)
+
+    # Split the cleaned string at the first comma (if present).
+    s, r = q.split(",", 1) if "," in q else (q, "")
+
+    if s:
+
+        # If both s and r have values, use them for filtering the queryset.
+        if r:
+            obj = product.objects.filter(name__startswith=s[0:2], type__name__startswith=r)
+        else:
+            # Only s has a value, filter with s.
+            obj = product.objects.filter(name__startswith=s[0:2])
+
+    else:
+        # Neither s nor r have values, return all objects.
+        obj = product.objects.all()
 
     context = {'obj': obj}
     return render(request, 'home.html', context)
 
 
-def user_accounts(request):
-    return render(request, 'profile.html')
+
 
 
 # user editting ( giving access to the user according to the authority)
