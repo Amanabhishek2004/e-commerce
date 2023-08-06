@@ -1,40 +1,68 @@
-from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, HttpResponse, redirect
-from django.contrib.auth.models import User
-from .models import *
 from django.contrib.auth import authenticate, login, logout
 from .forms import *
 from django.contrib.auth.decorators import login_required
 from user_accounts.models import *
+from base.search_bar_logic.services import *
 import uuid
 import datetime
 
 
+# Assuming that category and product are classes defined in a module named models
+
+
+
+
 def string_cleaner(string):
-  if string:
+    cleaned_string = ""
+    if string:
+        if "," in string:
+            for i in range(len(string)):
+                if string[i] == ",":
+                    continue
+                cleaned_string += string[i]
+        else:
+            cleaned_string = string
 
-    str1 = ""
-    str2 = ""
-    if  "," in string:
-        for i in range(len(string)):
-            if string[i] == ",":
-                str1 = string[:i].strip()
-                str2 = string[i + 1:].strip()
-                break
-        string = str1 + "," + str2
+        # Rest of the code remains unchanged
+        c = []
+        b = []
+        Categories = category.objects.all()
+        Products = product.objects.all()
+        for cat in Categories:
+            c.append(cat)
+        for prod in Products:
+            b.append(prod)
 
-    if  " " in string:
-        for i in range(len(string)):
-            if string[i] == " ":
-                str1 = string[:i].strip()
-                str2 = string[i + 1:].strip()
-                break
+        a = ["500", "1000", "2000", "5000", "10000"]
+        str1 = ""
+        str2 = ""
+        str3 = ""  # Initialize str3 to an empty string
+        str4 = ""
+        for price in a:
+            if price in cleaned_string:
+                str1 = price
+        for i in b:
+            if i.name in cleaned_string:
+                str2 = i.name  # Assuming 'name' is an attribute of the product instance
+        for j in c:
+            if j.name in cleaned_string:
+                str3 = j.name  # Assuming 'name' is an attribute of the category instance
+            print(str1)
+            print(str2)
+            print(str3)
+            # print(str1)
 
-        string = str1 + "," + str2
-    return string
-  else:
-      return ""
+        if "above" in cleaned_string:
+            str4 = "above"
+        elif "below" in cleaned_string:
+            str4 = "below"
 
+        return str1 + "," + str2 + "," + str3 + "," + str4
+    else:
+        return ""
+
+# fl electro,dsadasdnics above 1000
 
 
 def home(request):
@@ -42,27 +70,31 @@ def home(request):
 
     # Use the corrected string_cleaner function to clean the search query.
     q = request.GET.get("q")
+
+
     q = string_cleaner(q)
+
     print(q)
 
     # Split the cleaned string at the first comma (if present).
-    s, r = q.split(",", 1) if "," in q else (q, "")
-
-    if s:
+    if q:
+        # p : price
+        # t : product
+        # s : category
+        # r : above or below
+        p, t, s, r = q.split(",", 3)
 
         # If both s and r have values, use them for filtering the queryset.
-        if r:
-            obj = product.objects.filter(name__startswith=s[0:2], type__name__startswith=r)
-        else:
-            # Only s has a value, filter with s.
-            obj = product.objects.filter(name__startswith=s[0:2])
-
+        if  r == "above":
+            obj = product.objects.filter(name__startswith=t, type__name__startswith=s, price__gt=int(p))
+        elif r == "below":
+            obj = product.objects.filter(name__startswith=t, type__name__startswith=s, price__lte=int(p))
     else:
-        # Neither s nor r have values, return all objects.
         obj = product.objects.all()
-
+    print(obj)
     context = {'obj': obj}
     return render(request, 'home.html', context)
+
 
 
 
