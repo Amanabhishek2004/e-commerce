@@ -42,12 +42,17 @@ def string_cleaner(string):
         for price in a:
             if price in cleaned_string:
                 str1 = price
+
         for i in b:
             if i.name in cleaned_string:
-                str2 = i.name  # Assuming 'name' is an attribute of the product instance
+                str2 = (i.name)
+
+            # Assuming 'name' is an attribute of the product instance
         for j in c:
             if j.name in cleaned_string:
-                str3 = j.name  # Assuming 'name' is an attribute of the category instance
+                str3 = (j.name)
+            # means "" is getting stored in str in case of no matching query
+            # Assuming 'name' is an attribute of the category instance
             print(str1)
             print(str2)
             print(str3)
@@ -55,9 +60,12 @@ def string_cleaner(string):
 
         if "above" in cleaned_string:
             str4 = "above"
-        elif "below" in cleaned_string:
+        else:
+            str4=""
+        if "below" in cleaned_string:
             str4 = "below"
-
+        else:
+             str4 =""
         return str1 + "," + str2 + "," + str3 + "," + str4
     else:
         return ""
@@ -70,9 +78,8 @@ def home(request):
 
     # Use the corrected string_cleaner function to clean the search query.
     q = request.GET.get("q")
-
-
     q = string_cleaner(q)
+
 
     print(q)
 
@@ -84,13 +91,19 @@ def home(request):
         # r : above or below
         p, t, s, r = q.split(",", 3)
 
+
+
         # If both s and r have values, use them for filtering the queryset.
-        if  r == "above":
-            obj = product.objects.filter(name__startswith=t, type__name__startswith=s, price__gt=int(p))
-        elif r == "below":
-            obj = product.objects.filter(name__startswith=t, type__name__startswith=s, price__lte=int(p))
+
+    if  r == "above":
+            obj = product.objects.filter(name__istartswith=t[0:2], type__name__icontains=s, price__gt=int(p))
+    elif r == "below":
+            obj = product.objects.filter(name__istartswith=t[0:2], type__name__icontains=s, price__lte=int(p))
+
     else:
-        obj = product.objects.all()
+            obj = product.objects.filter(name__istartswith=t[0:2], type__name__icontains=s)
+    # else:
+    #     obj = product.objects.all()
     print(obj)
     context = {'obj': obj}
     return render(request, 'home.html', context)
