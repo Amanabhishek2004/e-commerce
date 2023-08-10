@@ -63,26 +63,24 @@
         <div class="header">
             <h1>Shipment Tracking</h1>
         </div>
-        
+        {% for order_item in list %}
+
+
         <div class="shipment">
-            <div class="tracking-number">Tracking #: XYZ123456789</div>
-            <div class="status">Status: In Transit</div>
+            <div class="tracking-number"><p>{{ order_item.tracking_id }}</p></div>
+            <div class="status">{{order_item.status}}</div>
+            <div class="status">{{order_item.Product.name}}</div>
+
             <div class="details">
-                <p><strong>Origin:</strong> New York, NY</p>
+
+                <strong>{{ .status }}</strong>
                 <p><strong>Destination:</strong> Los Angeles, CA</p>
                 <p><strong>Estimated Delivery:</strong> July 30, 2023</p>
             </div>
         </div>
-        
-        <div class="shipment">
-            <div class="tracking-number">Tracking #: ABC987654321</div>
-            <div class="status">Status: Delivered</div>
-            <div class="details">
-                <p><strong>Origin:</strong> Chicago, IL</p>
-                <p><strong>Destination:</strong> Miami, FL</p>
-                <p><strong>Delivered On:</strong> July 25, 2023</p>
-                <p><strong>Recipient:</strong> John Doe</p>
-            </div>
+        {% endfor %}
+
+
         </div>
         
         
@@ -91,7 +89,7 @@
         <div class="footer">
             <p>© 2023 Shipment Tracking. All rights reserved.</p>
         </div>
-    </div>
+
 </body>
 </html>
 

@@ -72,7 +72,6 @@ def string_cleaner(string):
 
 # fl electro,dsadasdnics above 1000
 
-
 def home(request):
     # logic for search bar
 
@@ -80,8 +79,13 @@ def home(request):
     q = request.GET.get("q")
     q = string_cleaner(q)
 
-
     print(q)
+
+    # Initialize variables with default values
+    p = ""
+    t = ""
+    s = ""
+    r = ""
 
     # Split the cleaned string at the first comma (if present).
     if q:
@@ -91,22 +95,19 @@ def home(request):
         # r : above or below
         p, t, s, r = q.split(",", 3)
 
-
-
-        # If both s and r have values, use them for filtering the queryset.
-
-    if  r == "above":
-            obj = product.objects.filter(name__istartswith=t[0:2], type__name__icontains=s, price__gt=int(p))
+    # If both s and r have values, use them for filtering the queryset.
+    if r == "above":
+        obj = product.objects.filter(name__istartswith=t[0:2], type__name__icontains=s, price__gt=int(p))
     elif r == "below":
-            obj = product.objects.filter(name__istartswith=t[0:2], type__name__icontains=s, price__lte=int(p))
-
+        obj = product.objects.filter(name__istartswith=t[0:2], type__name__icontains=s, price__lte=int(p))
     else:
-            obj = product.objects.filter(name__istartswith=t[0:2], type__name__icontains=s)
-    # else:
-    #     obj = product.objects.all()
+        obj = product.objects.filter(name__istartswith=t[0:2], type__name__icontains=s)
+
+    # Rest of the code remains unchanged
     print(obj)
     context = {'obj': obj}
     return render(request, 'home.html', context)
+
 
 
 
@@ -314,7 +315,7 @@ def buy_item_through_cart(request, pk):
     Customer = customer.objects.filter(name=user).first()
     Product = product.objects.get(id=pk)
     cart_item = cart.objects.filter(ordered_by=user, item=Product).first()
-    Address = address.objects.get(host=user)
+    Address = address.objects.filter(host=user).first()
 
     # Initialize the form with the cart_item quantity
     
@@ -399,15 +400,11 @@ def review_edit(request):
       if form.is_valid():  
         form = review_edit_form(request.post,instance =Reveiw)
         form.save()
-    return render(request,"edit_review.html",{})     
-#  shippment tracking
+    return render(request,"edit_review.html",{})
 
-def shippment_tracking(request, pk):
-    order_item = orders.objects.get(id=pk)
-    # shippmet_details = order_tracking.objects.filter(tracking_id=value).first()
 
-    context = {"order_items": order_item}
-    return render(request, "shippment_tracking.html", context)
+
+
 
 
 #  notification

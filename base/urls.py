@@ -25,7 +25,6 @@ urlpatterns = [
 
 
     path("review/<str:pk>", views.review_post, name="review"),
-    path("shippment-tracking/",views.shippment_tracking, name="tracking"),
 
 
 ]
