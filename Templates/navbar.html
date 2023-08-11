@@ -159,10 +159,18 @@ button{
     <div class="class">
     <nav class="navbar">
         <a href="/" class="logo">Logo</a>
+        {% if page == "shippment" %}
+        
+        <form class="search-bar"  method="GET" action="{% url 'accounts:tracking' %}">
+            <input type="text" name ="r" placeholder="Search" />
+            <button type="submit">Search</button>
+        </form>
+        {% else %}
         <form class="search-bar"  method="GET" action="{% url 'home' %}">
             <input type="text" name ="q" placeholder="Search" />
             <button type="submit">Search</button>
         </form>
+        {% endif %}
 
         <ul class="nav-links">
             <li><a href="{% url 'home' %}">Home</a></li>

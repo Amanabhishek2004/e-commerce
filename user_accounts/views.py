@@ -86,6 +86,7 @@ def delete_review(request):
     return render(request,"delete_user.html")
 
 def shippment_view(request):
+    page = "shippment"
     user = request.user
     product = orders.objects.filter(ordered_by=user)
     shippment_status_list = []
@@ -97,20 +98,23 @@ def shippment_view(request):
         "list" : shippment_status_list
     }
 
-    return render(request , "shippment_tracking.html",context)
-# def shippment_details(request,pk):
-#     user = request.user
-#     product = orders.objects.filter(ordered_by = user)
-#     shippment_status_list = []
-#     for prod in product:
-#         order_status = order_tracking.objects.get(user = user , Product = i)
-#         shippment_status_list.append(order_status)
-#
-#
-#     for i in shippment_status_list:
-#         if i.id == pk :
-#            return i
-#     a = i .dlivery_status_set.all()
+    return render(request , "order_details.html",context)
+
+
+def shippment_details(request,pk):
+    user = request.user
+    product = orders.objects.filter(ordered_by = user)
+    shippment_status_list = []
+    for prod in product:
+        order_status = order_tracking.objects.filter(user = user , Product = prod.name).first()
+        shippment_status_list.append(order_status)
+
+
+    for i in shippment_status_list:
+        if i.Product.id == pk :
+           return i
+    a = i.dlivery_status.all()
+    return render(request,"shippment_tracking.html",context={"a":a,"i":i})
 
 
 

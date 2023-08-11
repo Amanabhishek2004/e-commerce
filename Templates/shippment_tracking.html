@@ -1,96 +1,61 @@
-{% extends 'main.html' %}
-{% block content %}
-
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Shipment Tracking - Dark Theme</title>
-        <style>
-            body {
-                background-color: #111;
-                color: #eee;
-                font-family: Arial, sans-serif;
-            }
-            
-            .container {
-                max-width: 800px;
-                margin: 0 auto;
-                padding: 20px;
-            }
-            
-            .header {
-                text-align: center;
-                margin-bottom: 30px;
-            }
-            
-            .shipment {
-                background-color: #222;
-                padding: 15px;
-                border-radius: 5px;
-                margin-bottom: 20px;
-            }
-            
-            .shipment .tracking-number {
-                font-size: 20px;
-                font-weight: bold;
-                margin-bottom: 10px;
-            }
-            
-            .shipment .status {
-                font-size: 16px;
-                font-weight: bold;
-                color: #4CAF50;
-                margin-bottom: 10px;
-            }
-            
-            .shipment .details {
-                font-size: 14px;
-                line-height: 1.6;
-            }
-            
-            .footer {
-                text-align: center;
-                margin-top: 30px;
-                color: #888;
-                font-size: 12px;
-            }
-        </style>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shipment Tracking</title>
+<style>
+  body {
+    background-color: #111;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  .container {
+    background-color: #222;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 400px;
+    text-align: center;
+  }
+  
+  h1 {
+    margin-bottom: 20px;
+  }
+  
+  .shipment-details {
+    background-color: #333;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 10px;
+    text-align: left;
+  }
+  
+  .shipment-details h2 {
+    margin-top: 0;
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Shipment Tracking</h1>
-        </div>
-        {% for order_item in list %}
+  <div class="container">
+    <h1>Shipment Tracking</h1>
+    <div class="shipment-details">
+      <h2>{{i.tracking_id}}</h2>
+      <h2>{{i.Product.name}}</h2>
 
-
-        <div class="shipment">
-            <div class="tracking-number"><p>{{ order_item.tracking_id }}</p></div>
-            <div class="status">{{order_item.status}}</div>
-            <div class="status">{{order_item.Product.name}}</div>
-
-            <div class="details">
-
-                <strong>{{ .status }}</strong>
-                <p><strong>Destination:</strong> Los Angeles, CA</p>
-                <p><strong>Estimated Delivery:</strong> July 30, 2023</p>
-            </div>
-        </div>
-        {% endfor %}
-
-
-        </div>
-        
-        
-        <!-- Add more shipments as needed -->
-        
-        <div class="footer">
-            <p>© 2023 Shipment Tracking. All rights reserved.</p>
-        </div>
-
+      
+      <p>Estimated Delivery: August 20, 2023</p>
+      {% for item in a %}
+      <h4>status : {{item}}</h4>
+      {% endfor %}
+    </div>
+  </div>
 </body>
 </html>
-
-{% endblock content %}
