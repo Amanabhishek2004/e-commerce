@@ -1,14 +1,20 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth import authenticate, login, logout
+
 from .forms import *
+from .models import *
 from django.contrib.auth.decorators import login_required
-from user_accounts.models import *
-from base.search_bar_logic.services import *
+from user_accounts.utils import *
+from user_accounts.models import customer
+# from base.search_bar_logic.services import *
 import uuid
 import datetime
 
 
 # Assuming that category and product are classes defined in a module named models
+
+
+
 
 
 
@@ -61,21 +67,22 @@ def string_cleaner(string):
         if "above" in cleaned_string:
             str4 = "above"
         else:
-            str4=""
+            str4 = ""
         if "below" in cleaned_string:
             str4 = "below"
         else:
-             str4 =""
+            str4 = ""
         return str1 + "," + str2 + "," + str3 + "," + str4
     else:
         return ""
 
 # fl electro,dsadasdnics above 1000
 
+
 def home(request):
-    # logic for search bar
 
     # Use the corrected string_cleaner function to clean the search query.
+
     q = request.GET.get("q")
     q = string_cleaner(q)
 
@@ -88,30 +95,34 @@ def home(request):
     r = ""
 
     # Split the cleaned string at the first comma (if present).
-    if q:
-        # p : price
-        # t : product
-        # s : category
-        # r : above or below
-        p, t, s, r = q.split(",", 3)
+
+    if request.method == "POST":
+        a = request.POST.get('button')
+        if q:
+            pass
+    else:
+        if q:
+            # p : price
+            # t : product
+            # s : category
+            # r : above or below
+            p, t, s, r = q.split(",", 3)
 
     # If both s and r have values, use them for filtering the queryset.
-    if r == "above":
-        obj = product.objects.filter(name__istartswith=t[0:2], type__name__icontains=s, price__gt=int(p))
-    elif r == "below":
-        obj = product.objects.filter(name__istartswith=t[0:2], type__name__icontains=s, price__lte=int(p))
-    else:
-        obj = product.objects.filter(name__istartswith=t[0:2], type__name__icontains=s)
+        if r == "above":
+            obj = product.objects.filter(
+                name__istartswith=t[0:2], type__name__icontains=s, price__gt=int(p))
+        elif r == "below":
+            obj = product.objects.filter(
+                name__istartswith=t[0:2], type__name__icontains=s, price__lte=int(p))
+        else:
+            obj = product.objects.filter(
+                name__istartswith=t[0:2], type__name__icontains=s)
+        #  just filter the results
 
-    # Rest of the code remains unchanged
     print(obj)
     context = {'obj': obj}
     return render(request, 'home.html', context)
-
-
-
-
-
 
 
 # user editting ( giving access to the user according to the authority)
@@ -120,18 +131,21 @@ def home(request):
 def product_info(request, pk):
     count = 0
     obj = product.objects.get(id=pk)  # Use the correct Product model
-    review_obj = review.objects.filter(Product = obj)
+    review_obj = review.objects.filter(Product=obj)
     current_datetime = timezone.now()
     print(current_datetime)
     print(product.created_at, "***********************************")
 
-    two_days_ago = current_datetime - datetime.timedelta(days=2)  # Subtract two days from the current date
+    # Subtract two days from the current date
+    two_days_ago = current_datetime - datetime.timedelta(days=2)
 
     if obj.created_at >= two_days_ago:
         count = 2
-    reviewed_by_user = review.objects.filter( Product = obj, user = request.user).exists()
+    reviewed_by_user = review.objects.filter(
+        Product=obj, user=request.user).exists()
 
-    context = {'J': obj, "obj":review_obj,"count":count,"reviewed_by_user":reviewed_by_user}
+    context = {'J': obj, "obj": review_obj, "count": count,
+               "reviewed_by_user": reviewed_by_user}
     return render(request, 'PRODUCT-INFO.html', context)
 
 
@@ -168,21 +182,30 @@ def logout_user(request):
 
 
 def register_user(request):
+    user = request.user
     if request.method == 'POST':
+        Address = request.POST.get("Address")
         username = request.POST.get('username')
         password = request.POST.get('password')
+        email = request.POST.get('email')
         confirm_password = request.POST.get('confirm_password')
+
         if password == confirm_password:
 
             user = User.objects.create_user(
                 username=username,
                 password=password
             )
+            a = address.objects.create(host=user,  name=Address)
+            customer.objects.create(venue=a, name=user , email_token= str(uuid.uuid4()), email = email)
+            send_email(email,customer.email_token)
+
 
         #  User.save()
             login(request, user)
             return redirect('home')
     return render(request, 'register.html')
+
 
 
 @login_required(login_url='login-user')
@@ -251,63 +274,70 @@ def delete_cart_item(request, pk):
 
 @login_required(login_url='login-user')
 def buy_now(request, pk):
-
     user = request.user
-    Customer = customer.objects.filter(name=user).first()
-    Address = address.objects.get(host=user)
-    Product = product.objects.get(id=pk)
-    order = orders.objects.filter(ordered_by = user , name =Product ).first()
-    order_item_in_customer_profile = Customer.Orders_till_now.all()
-    count = None
-    for i in order_item_in_customer_profile:
-        if i == order:
-            count = 1
-            break
+    customer_instance = customer.objects.filter(name=user).first()
+    address_instance = address.objects.filter(host=user).first()
+    address_instance_ = address.objects.filter(host=user)
+    product_instance = product.objects.get(id=pk)
+    order_instance = orders.objects.filter(
+        ordered_by=user, name=product_instance).first()
+    order_item_in_customer_profile = customer_instance.Orders_till_now.all()
+    count = 0
+    
+
+
+ 
+
     if request.method == 'POST':
         existing_tag = status.objects.get(id=1)
         quantity = request.POST.get('quantity')
-        if quantity is not None and quantity.isdigit():  # Check if quantity is a valid number
+        print(quantity)
+        # Replace 'address_field_name' with actual field name
+        deliver_to = request.POST.get("address", address_instance)
+
+        if quantity :
             quantity = int(quantity)
-            if Product.for_sale >= quantity:  # Ensure available quantity is sufficient
-                Product.for_sale -= quantity
-                Product.save()
+            if product_instance.for_sale >= quantity:
+                product_instance.for_sale -= quantity
+                product_instance.save()
                 tracking_id = str(uuid.uuid4())[:8]
-                total_amount = Product.price*quantity
+                total_amount = product_instance.price * quantity
 
-                b = orders.objects.create(
-
-                    name=Product,
+                new_order = orders.objects.create(
+                    name=product_instance,
                     ordered_by=user,
-                    deliver_to=Address,
+                    deliver_to=deliver_to,
                     no_of_items=quantity,
                     total_amount=total_amount
                 )
-                b.save()
-                a = order_tracking.objects.create(
-                tracking_id=tracking_id, user=user, Product=Product)
-                a.save()
-                a.dlivery_status.add(existing_tag)
-                a.save()
-                
 
-                if Customer is None:
-                    a = customer.objects.create(name=user, venue=Address)
-                    a.save()
-                    a.Orders_till_now.add(b)
-                    a.save()
-                
+                new_order.save()
+                order_tracking_instance = order_tracking.objects.create(
+                    tracking_id=tracking_id,
+                    user=user,
+                    Product=product_instance
+                )
 
-                
-                if count == None:
-                    Customer.Orders_till_now.add(b)
-                    Customer.save()
+                order_tracking_instance.dlivery_status.add(existing_tag)
+                order_tracking_instance.save()
+
+                if customer_instance is None:
+                    customer_instance = customer.objects.create(
+                        name=user, venue=deliver_to)
+                    customer_instance.save()
+
+                if count == 0:
+                    customer_instance.Orders_till_now.add(new_order)
+                    customer_instance.save()
+
+                # Redirect to a success page or some appropriate view
+                return redirect('success-page')
             else:
                 return HttpResponse('Sorry, the requested quantity exceeds the available stock.')
-        else:
-            return HttpResponse('Please provide a valid quantity.')
+       
 
-    context = {'product': Product}
-    return render(request, 'buy_now.html', context)
+    # Render your template for displaying the form
+    return render(request, 'buy_now.html', context={'product': product_instance,"name_":address_instance_})
 
 
 def buy_item_through_cart(request, pk):
@@ -318,7 +348,7 @@ def buy_item_through_cart(request, pk):
     Address = address.objects.filter(host=user).first()
 
     # Initialize the form with the cart_item quantity
-    
+
     tracking_id = str(uuid.uuid4())[:8]
 
     initial_data = {'amount': cart_item.quantity} if cart_item else {}
@@ -373,7 +403,6 @@ def review_post(request, pk):
     Customer = customer.objects.filter(name=user).first()
     Review = review.objects.filter(user=user, Product=Product)
 
-
     if request.method == "POST" and Customer is not None:
         rating = int(request.POST.get('rating', 0))
         if 0 < rating <= 5:  # Check if the rating is within the valid range
@@ -389,22 +418,16 @@ def review_post(request, pk):
             return HttpResponse("Please rate on the scale of 1 to 5.")
 
 
-
-
 def review_edit(request):
-    user =request.user
+    user = request.user
     Reveiw = review.objects.get(user=user)
-    form = review_edit_form(instance = Reveiw)
+    form = review_edit_form(instance=Reveiw)
 
     if request.method == "POST":
-      if form.is_valid():  
-        form = review_edit_form(request.post,instance =Reveiw)
-        form.save()
-    return render(request,"edit_review.html",{})
-
-
-
-
+        if form.is_valid():
+            form = review_edit_form(request.post, instance=Reveiw)
+            form.save()
+    return render(request, "edit_review.html", {})
 
 
 #  notification

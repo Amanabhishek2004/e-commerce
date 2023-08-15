@@ -3,11 +3,13 @@ from django.contrib.auth.models import User
 from base.models import address, orders
 from .forms import UserUpdateForm
 from .models import *
+from user_accounts.utils import *
+from  django.http import HttpResponse
 
 # Create your views here.
 
 def success_view(request):
-    # Your view logic here
+
     return render(request, "success.html")
 
 
@@ -41,25 +43,36 @@ def view(request):
 def update_user(request):
     page = "update"
     user = request.user
-    a = user.username
-    b = user.email
     user_to_be_updated = User.objects.get(username=user.username)
-    Customer = customer.objects.filter(name = user)
+    Customer = customer.objects.filter(name=user)
     form = UserUpdateForm(instance=user_to_be_updated)
 
     if request.method == 'POST':
         form = UserUpdateForm(request.POST, instance=user_to_be_updated)
         if form.is_valid():
-            form.save()  # This will save the form data to the corresponding User model
-            if a != user.username:
-            
-              print(a != user.username)
-              context = {"page":page,"a":a,"username":user.username} 
-              return redirect("accounts:success",context)# Redirect to a success page after updating the user
-            if b != user.email:
-              context = {"page":page,"a":b,"username":user.email} 
-              return redirect("accounts:success",context)# Redirect to a success page after updating the user
-    return render(request, 'user_update.html', {'form': form,"customer":Customer})
+            old_username = user.username
+            old_email = user.email
+            form.save()
+
+            if old_email == user.email:
+                context = {"page": page, "a": old_email, "username": user.email}
+                return render(request, "success.html", context)
+
+            if old_username == user.username:
+                send_email()
+                context = {"page": page, "a": old_username, "username": user.username}
+                return render(request, "success.html", context)
+
+    return render(request, 'user_update.html', {'form': form, "customer": Customer})
+
+def verify_email(request,pk):
+    try:
+        a = customer.objects.get(email_token = pk)
+        a.email_is_verified = True
+        a.save()
+        return HttpResponse("your email has been verified")
+    except:
+         return Httpresponse("can't verify your email")
 
 
 def delete_user(request):
@@ -108,7 +121,6 @@ def shippment_details(request,pk):
     for prod in product:
         order_status = order_tracking.objects.filter(user = user , Product = prod.name).first()
         shippment_status_list.append(order_status)
-
 
     for i in shippment_status_list:
         if i.Product.id == pk :

@@ -1,3 +1,10 @@
+
+{% extends "main.html" %}
+
+{% load static %}
+
+{% block  content %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,6 +51,7 @@
 </style>
 </head>
 <body>
+src = "{% static 'images/name_of_file.png' %}"
   <div class="container">
     <h1>Shipment Tracking</h1>
     <div class="shipment-details">
@@ -59,3 +67,5 @@
   </div>
 </body>
 </html>
+
+{% endblock content %}

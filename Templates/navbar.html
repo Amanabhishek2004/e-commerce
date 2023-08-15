@@ -2,6 +2,9 @@
 <html>
     <head>
         <title>My Ecommerce Website</title>
+{#cdn#}
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
         <style>
             /* Add CSS styles to customize the navigation bar */
             
@@ -158,12 +161,12 @@ button{
 <body>
     <div class="class">
     <nav class="navbar">
-        <a href="/" class="logo">Logo</a>
+        <a href="/" class="logo"><i class="fa-solid fa-house" style="color: #ebecf0;"></i>Logo</a>
         {% if page == "shippment" %}
         
         <form class="search-bar"  method="GET" action="{% url 'accounts:tracking' %}">
             <input type="text" name ="r" placeholder="Search" />
-            <button type="submit">Search</button>
+            <button type="submit"><i class="ri-search-line"></i></button>
         </form>
         {% else %}
         <form class="search-bar"  method="GET" action="{% url 'home' %}">
@@ -189,6 +192,10 @@ button{
             
         
         </ul>
+    <ul>
+        
+        
+    </ul>
     </nav>
 
 
@@ -197,10 +204,11 @@ button{
     <hr>
 
 
-  <h1>Hi {{request.user}} !!!</h1>
+  <h1> Hi {{request.user}} !!!</h1>
   
 
   <!-- <script src=""></script> -->
+    <script type="module" src="https://cdn.skypack.dev/ionicons@5.5.2"></script>
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
